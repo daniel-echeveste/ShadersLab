@@ -1,53 +1,39 @@
 import react from '@vitejs/plugin-react'
 import basicSsl from '@vitejs/plugin-basic-ssl'
-import { transformWithEsbuild } from 'vite'
+import { transformWithEsbuild, defineConfig } from 'vite'
 import restart from 'vite-plugin-restart'
-import  glsl  from 'vite-plugin-glsl'
-import { defineConfig } from 'vite'
-import tailwindcss from '@tailwindcss/vite'
+import glsl from 'vite-plugin-glsl'
+import tailwindcss from '@tailwindcss/vite'  // mejor eliminar o configurar Tailwind vía postcss
 
-export default {
-    root: 'src/',
-    publicDir: '../public/',
-    plugins:
-    [
-        // Restart server on static/public file change
-        restart({ restart: [ '../public/**', ] }),
-
-        // React support
-        react(),
-        //https support 
-        basicSsl(),
-        // shader files support 
-        glsl(),
-        // Tailwind Support 
-        tailwindcss(),
-        // .js file support as if it was JSX
-        {
-            name: 'load+transform-js-files-as-jsx',
-            async transform(code, id)
-            {
-                if (!id.match(/src\/.*\.js$/))
-                    return null
-
-                return transformWithEsbuild(code, id, {
-                    loader: 'jsx',
-                    jsx: 'automatic',
-                });
-            },
-        },
-    ],
-    server:
+export default defineConfig({
+  root: 'src/',
+  publicDir: '../public/',
+  base: '/ShadersLab/',   // base debe estar aquí, no dentro de build
+  plugins: [
+    restart({ restart: ['../public/**'] }),
+    react(),
+    basicSsl(),
+    glsl(),
+    tailwindcss(),  // mejor no usar este plugin si no es estrictamente necesario
     {
-        host: true, // Open to local network and display URL
-        open: !('SANDBOX_URL' in process.env || 'CODESANDBOX_HOST' in process.env) // Open if it's not a CodeSandbox
+      name: 'load+transform-js-files-as-jsx',
+      async transform(code, id) {
+        if (!id.match(/src\/.*\.js$/)) return null
+        return transformWithEsbuild(code, id, {
+          loader: 'jsx',
+          jsx: 'automatic',
+        })
+      },
     },
-    build:
-    {
-        base: '/ShadersLab/',
-        outDir: '../build', // Output in the dist/ folder
-        emptyOutDir: true, // Empty the folder first
-        sourcemap: true, // Add sourcemap
-        target: 'esnext',
-    },
-}
+  ],
+  server: {
+    host: true,
+    open: !('SANDBOX_URL' in process.env || 'CODESANDBOX_HOST' in process.env),
+  },
+  build: {
+    outDir: '../build',
+    emptyOutDir: true,
+    sourcemap: true,
+    target: 'esnext',
+  },
+})
