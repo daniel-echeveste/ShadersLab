@@ -45,7 +45,7 @@ export default function CursorParticles(args) {
     displacement.context.fillRect(0, 0, displacement.canvas.width, displacement.canvas.height)
     //glow image
     displacement.glowImage = new Image()
-    displacement.glowImage.src = "/textures/imgs/glow.png"
+    displacement.glowImage.src = "./textures/imgs/glow.png"
 
 
     //raycaster
@@ -79,25 +79,28 @@ export default function CursorParticles(args) {
     
 
     const textureLoader = new THREE.TextureLoader()
-    const pictureTexture1 = textureLoader.load('/textures/imgs/picture-1.png')
-    const pictureTexture2 = textureLoader.load('/textures/imgs/picture-2.png')
-    const pictureTexture3 = textureLoader.load('/textures/imgs/picture-3.png')
-    const pictureTexture4 = textureLoader.load('/textures/imgs/picture-4.png')
+    
+    const textures = {
+        "Picture 1": textureLoader.load('./textures/imgs/picture-1.png'),
+        "Picture 2": textureLoader.load('./textures/imgs/picture-2.png'),
+        "Picture 3": textureLoader.load('./textures/imgs/picture-3.png'),
+        "Picture 4": textureLoader.load('./textures/imgs/picture-4.png'),
+    }
 
     const controls = useControls({
         picture: {
-            value: pictureTexture1,
-            options: [pictureTexture1, pictureTexture2, pictureTexture3, pictureTexture4]
+            value: "Picture 1",
+            options: Object.keys(textures)
         }
-    })
-    const particlesMaterial = new THREE.ShaderMaterial({
+    })  
+        const particlesMaterial = new THREE.ShaderMaterial({
         vertexShader: vertexShader,
         fragmentShader: fragmentShader,
         uniforms:
         {
             uTime: { value: 0 },
             uResolution: new THREE.Uniform(new THREE.Vector2(sizes.width, sizes.height)),
-            uPictureTexture: new THREE.Uniform(controls.picture),
+            uPictureTexture: new THREE.Uniform(textures[controls.picture]),
             uDisplacementTexture: new THREE.Uniform(displacement.texture)
         }
     })
@@ -110,7 +113,7 @@ export default function CursorParticles(args) {
     
 
     const eventHandler = (event) => {
-        console.log(event)
+        // console.log(event)
         displacement.CanvasCursor.x = event.uv.x * displacement.canvas.width
         displacement.CanvasCursor.y = (1 - event.uv.y) * displacement.canvas.height
     }
