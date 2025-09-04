@@ -9,13 +9,10 @@ import {
   Center,
 } from "@react-three/drei";
 const shaderModules = import.meta.glob('./shaders/**/shader.jsx');
-export default function Shaders({portalActive, setPortalActive, togglePortal, portal,}) 
+export default function Shaders({currentIndex, setCurrentIndex, shaders, setShaders}) 
 {
-  console.log('estamos en los shaders');
-  // cameraShaders();
-  const [shaders, setShaders] = useState([]);
+  
   useEffect(() => {
-    
     const loadShaders = async () => {
       const entries = Object.entries(shaderModules);
       const loaded = await Promise.all(
@@ -31,22 +28,10 @@ export default function Shaders({portalActive, setPortalActive, togglePortal, po
 
     loadShaders();
   }, []);
-  
-  const [currentShaderIndex, setCurrentShaderIndex] = useState(0);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const nextShader = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % shaders.length);
-  };
-  
-  const prevShader = () => {
-    setCurrentIndex((prevIndex) =>
-      (prevIndex - 1 + shaders.length) % shaders.length
-    );
-  };
   const ActiveShader = shaders[currentIndex]?.Component;
   return (
     <>
-      <OrbitControls />
+      <OrbitControls enableZoom={false} />
       <ambientLight intensity={0.2} />
       <Environment 
       intensity={0.2} 
@@ -93,22 +78,22 @@ export default function Shaders({portalActive, setPortalActive, togglePortal, po
         </group>
       )}
       {/* NAVEGATION  */}
-      <Html position={[0, 0, 0]} center >
+      {/* <Html position={[0, 0, 0]} center >
             <div className="relative w-screen  ">
               <button
                 onClick={prevShader}
-                className="absolute left-10 top-1/2 -translate-y-1/2 p-2 bg-black/50 text-white rounded-full cursor-pointer" 
+                className="fixed left-10 top-1/2 -translate-y-1/2 p-2 bg-black/50 text-white rounded-full cursor-pointer" 
               >
                 ◀️
               </button>
               <button
                 onClick={nextShader}
-                className="absolute right-10 top-1/2 -translate-y-1/2 p-2 bg-black/50 text-white rounded-full cursor-pointer"
+                className="fixed right-10 top-1/2 -translate-y-1/2 p-2 bg-black/50 text-white rounded-full cursor-pointer"
               >
                 ▶️
               </button>
             </div>
-          </Html>
+        </Html> */}
     </>
   );
 }

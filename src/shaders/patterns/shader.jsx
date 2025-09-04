@@ -33,7 +33,7 @@ export default function PatternsShaderMaterial() {
         // shaderMaterial.uniforms.uTime.value = state.clock.elapsedTime;
     })
     const textureLoader = new THREE.TextureLoader()
-    const flagTexture = textureLoader.load('/textures/can-flag.jpg')
+    const flagTexture = textureLoader.load('./textures/can-flag.jpg')
     // const CustomShaderMaterial = shaderMaterial(
     //     { uFrequency: new THREE.Vector2(20,10) ,
     //     uTime:  0 ,

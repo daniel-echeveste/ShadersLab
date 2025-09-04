@@ -56,7 +56,7 @@ export default function ragingSeaMaterial() {
         shaderMaterial.uniforms.uTime.value = state.clock.elapsedTime;
     })
     const textureLoader = new THREE.TextureLoader()
-    const flagTexture = textureLoader.load('/textures/can-flag.jpg')
+    const flagTexture = textureLoader.load('./textures/can-flag.jpg')
 
     const shaderMaterial = new THREE.ShaderMaterial({
         vertexShader: testVertexShader,

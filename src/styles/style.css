@@ -5,13 +5,14 @@
 @theme {
     /* define animación */
     --animate-footstep: footstep 0.8s ease-out forwards;
-    
+     
     /* define keyframes */
     @keyframes footstep {
       0%   { opacity: 0; transform: scale(0.5); }
       100% { opacity: 0.7; transform: scale(1); }
     }
+      @utility no-scrollbar {
+      @apply [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;
+    }
   }
   
-  /* incluye utilidades */
-  @import "tailwindcss/utilities";
